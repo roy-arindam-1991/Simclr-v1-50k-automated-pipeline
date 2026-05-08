@@ -7,51 +7,40 @@
 ![Accuracy](https://img.shields.io/badge/SSL_Accuracy-93.66%25-brightgreen.svg)
 ![Dice](https://img.shields.io/badge/Segmentation_Dice-0.93-blue.svg)
 
-This repository provides a comprehensive computational framework for the automated analysis and 3D reconstruction of fossilized structures using volumetric CT imaging. This pipeline represents the core technical implementation for the study targeted for Nature Machine Intelligence.
+This repository provides the core technical implementation for the study: **"Breaking the bottleneck: self-supervised deep learning for fully automated fossil CT segmentation"**. The framework introduces a self-supervised, end-to-end pipeline combining SimCLR v1 contrastive pre-training with deterministic pseudo-label generation and U-Net refinement to fully automate fossil CT segmentation without manual annotation.
 
 ## Key Contributors
 * **Arindam Roy**: Lead Researcher and Maintainer
 * **[Poulami Ghosh](https://github.com/g-Poulami)**: Contributor and Pipeline Developer
 
 ## Pipeline Workflow and Structure
-The workflow is a linear sequence of five research phases:
+The framework integrates heterogeneous information sources into a unified model representation through a knowledge fusion step.
 
-1. **Phase 0: Data Preprocessing**: Volumetric standardization (Raw TIF to HDF5).
-2. **Phase 1: Training**: Self-Supervised SimCLR ResNet50 pre-training.
-3. **Phase 2: Validation**: Manifold Analysis via UMAP feature clustering.
-4. **Phase 3: UNet**: Downstream fine-tuning for bone segmentation.
-5. **Phase 4: 3D Reconstruction**: Automated mesh generation and volumetrics.
+1. **Preprocessing and Normalisation**: Standardisation of CT slices into HDF5 format with intensity normalisation and z-standardisation to maintain consistency across the 50,626 image corpus.
+2. **SimCLR v1 Self-Supervised Pre-training**: A ResNet-50 base encoder learns domain-specific feature representations from unlabelled CT data through a stochastic data augmentation pipeline.
+3. **Post-hoc Validation**: Quality checks using UMAP dimensionality reduction and Grad-CAM heatmaps to ensure the learned representations encode biologically meaningful structures.
+4. **U-Net Refinement (Knowledge Fusion)**: A modified U-Net architecture integrates SSL-derived features with standardised spatial guidance from deterministic rule-based masks to resolve ambiguous fossil-matrix boundaries.
+5. **Volumetric 3D Mesh Generation**: Stacking 2D segmentation masks to reconstruct 3D volumes, followed by surface extraction using the marching cubes algorithm.
 
 ```text
 .
 ├── .github/workflows/   # Automated code integrity validation (CI/CD)
 ├── scripts/
-│   ├── python/          # Phase 0-4 algorithmic implementations
-│   └── bash/            # HPC/Slurm execution templates
+│   ├── python/          # Algorithmic implementations (Preprocessing to Meshing)
+│   └── bash/            # HPC/Slurm execution templates (BlueBear HPC)
 ├── LICENSE              # GNU GPLv3 (Arindam Roy)
 ├── README.md            # Technical documentation
-└── requirements.txt     # Python environment manifest
+└── requirements.txt     # Python environment manifest (Python 3.11)
 ```
 
 ## Research Summary
-
-### Phase 1: Training (Self-Supervised SimCLR)
-A ResNet50 backbone is trained via contrastive learning to recognize morphological bone features without manual labels. The model achieved a peak validation accuracy of 93.66% over 250 epochs on NVIDIA A100 hardware.
-
-### Phase 2: Validation
-UMAP manifold analysis confirmed the successful clustering of 7,824 valid 2D slices. This demonstrates the backbone's ability to distinguish complex biological morphologies in the latent space.
-
-### Phase 3: UNet (Downstream Segmentation)
-Utilizing a ResNet50-UNet architecture with Hybrid Fossil Loss (BCE + Tversky), the pipeline achieved a stable Dice Coefficient of 0.93 and an IoU of 0.82.
-
-### Phase 4: 3D Reconstruction
-Segmented 2D predictions are reconstructed into 3D manifolds using Marching Cubes and Laplacian smoothing. This phase provides automated morphometric reporting and high-resolution STL generation.
-
-## CI/CD and Automation
-This repository utilizes GitHub Actions to automatically validate code integrity on every push to the main branch.
+* **Scale**: Implemented on a taxonomically diverse corpus representing a five-fold increase over the largest prior training sets in palaeontology.
+* **Performance**: Achieved a Dice coefficient of 93.66% and IoU of 82.42% on held-out specimens.
+* **Generalisation**: Validated geometrically on six external specimens, achieving sub-voxel mesh agreement with manually thresholded references.
+* **Automation**: Reduces per-specimen processing from ~100 person-hours to 1–3 minutes of inference time.
 
 ## Data and Model Availability
-In accordance with journal guidelines, the raw CT data and generated 3D meshes are not hosted in this repository. These assets will be made available through official supplementary data repositories upon publication.
+In accordance with journal guidelines, raw CT data and generated 3D meshes are hosted via National Museums Scotland (NMS) and MorphoSource. Model weights and hyperparameter specifics are available from the corresponding author upon request.
 
 ## License
 Licensed under the GNU General Public License v3.0. Copyright (c) 2026 Arindam Roy.
