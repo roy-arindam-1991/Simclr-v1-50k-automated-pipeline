@@ -14,7 +14,6 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=128)
     return parser.parse_args()
 
-# Model loading and feature extraction logic for ResNet50 backbone
 if __name__ == "__main__":
     args = parse_args()
-    print(f"Validating SimCLR model using data: {args.data_h5}")
+    print(f"Executing validation for: {args.data_h5}")

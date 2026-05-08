@@ -1,4 +1,0 @@
-Nodes: bear-pg0208u04a
-Partition: icelake-gpua100-shared
-Requested: cpu=18, mem=120G, gres/gpu=1
-Peak Memory Used: 3915176K

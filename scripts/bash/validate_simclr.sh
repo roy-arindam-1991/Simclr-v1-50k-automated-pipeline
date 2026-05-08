@@ -1,6 +1,6 @@
 #!/bin/bash
-# Slurm Validation Template
-# Configure #SBATCH --account and --gres=gpu:1 manually for your cluster.
+# Slurm Validation Template - Generalized for GitHub
+# Manual configuration of #SBATCH headers required for cluster execution.
 
 PROJ_ROOT="${1:-./}"
 
