@@ -1,14 +1,14 @@
 #!/bin/bash
-# Slurm job script for splitting TIFF data. 
-# Configure #SBATCH directives here as per your cluster requirements.
+#SBATCH --qos gpus
+#SBATCH --partition a100
+#SBATCH --nodes 1
+#SBATCH --gpus-per-node 1
+#SBATCH --time 2:0:0
+#SBATCH --mem 32G
 
-# Use a project directory variable for portability
-PROJ_DIR="${1:-./}"
+# Preprocessing: Converts raw TIF stacks into standardized HDF5 format.
+module purge
+module load bear-apps/2023a
+module load Python/3.11.3-GCCcore-12.3.0
 
-# Run Python script with generalized arguments
-python3 "${PROJ_DIR}/scripts/python/split_tif.py" \
-  --input_dir "${PROJ_DIR}/input_data" \
-  --output_dir "${PROJ_DIR}/results" \
-  --train_ratio 0.8 \
-  --val_ratio 0.1 \
-  --test_ratio 0.1
+python3 ../python/01_preprocessing_hdf5.py
