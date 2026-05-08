@@ -3,53 +3,49 @@
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.1.2-EE4C2C.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Accuracy](https://img.shields.io/badge/SSL_Accuracy-93.66%25-brightgreen.svg)
-![Dice](https://img.shields.io/badge/Segmentation_Dice-0.93-blue.svg)
+![CI/CD](https://github.com/roy-arindam-1991/40k-pipeline-dataprep/workflows/CI/CD%20Pipeline/badge.svg)
 
-This repository documents a comprehensive deep learning framework for the automated analysis and segmentation of fossilized structures using 3D CT imaging. The pipeline is organized into five distinct phases.
+This repository documents a comprehensive deep learning framework for the automated analysis and segmentation of fossilized structures using 3D CT imaging. 
 
-## Phase 0: Data Preprocessing
-The initial phase focuses on converting high-resolution volumetric CT scans into a standardized format optimized for deep learning.
-* **Normalization and Scaling**: Raw TIF stacks are processed to ensure consistent intensity distributions, applying a fixed scaling factor to normalize density values.
-* **HDF5 Integration**: Processed slices are stored in HDF5 format to provide high-speed I/O performance on HPC clusters.
+## Pipeline Workflow
+The pipeline operates in a linear sequence to transform raw volumetric data into scientifically actionable 3D models:
 
-## Phase 1: Training (Self-Supervised SimCLR)
-This phase involves training a ResNet50 backbone via contrastive learning to recognize morphological features without manual labels.
-* **Accuracy**: The model achieved a peak validation accuracy of 93.66% over 250 epochs.
-* **Convergence**: Training was executed on NVIDIA A100 hardware, with stable convergence of the NT-Xent loss.
-
-## Phase 2: Validation (Feature Extraction and Manifold Analysis)
-The learned feature space is evaluated to ensure a biologically meaningful understanding of the data.
-* **Manifold Analysis**: UMAP dimensionality reduction successfully clustered 7,824 valid 2D slices.
-* **Clustering Integrity**: Clear separation in the UMAP coordinates suggests the model effectively distinguished between bone morphologies and matrix types.
-
-## Phase 3: UNet (Downstream Segmentation)
-The pre-trained ResNet50 weights are integrated into a UNet architecture for binary segmentation of bone versus matrix.
-* **Segmentation Quality**: The model reached a stable Dice Coefficient of 0.93 and an Intersection over Union (IoU) of 0.82.
-* **Optimization**: A Hybrid Fossil Loss (BCE + Tversky) was utilized to handle class imbalances and improve boundary localization in low-contrast regions.
-
-## Phase 4: 3D Mesh Generation and Volumetric Analysis
-The final phase reconstructs 2D predictions into 3D manifolds and calculates scientific volumetric metrics.
-* **Surface Reconstruction**: Employs Marching Cubes and Laplacian smoothing to generate high-fidelity STL meshes from segmented volumes.
-* **Morphometric Reporting**: The pipeline calculates the total scientific volume and provides detailed reports on voxel counts and mesh triangle density.
-* **Decimation**: Includes mesh decimation logic to maintain structural integrity while reducing the file size for smaller computational footprints.
+1. **Preprocessing**: Standardization of raw TIF stacks into optimized HDF5 files.
+2. **SSL Pre-training**: Feature learning via SimCLR to understand bone morphology without labels.
+3. **Manifold Validation**: UMAP analysis to verify the integrity of the learned latent space.
+4. **Segmentation**: Fine-tuning a ResNet50-UNet for precise bone extraction.
+5. **3D Reconstruction**: Generating smoothed STL meshes and volumetric reports.
 
 ## Repository Structure
-* scripts/python/: Generalized scripts for preprocessing, SSL training, validation, UNet segmentation, and 3D meshing.
-* scripts/bash/: Slurm templates for automated execution on HPC environments.
+```text
+.
+├── .github/workflows/
+│   └── main.yml              # CI/CD pipeline configuration
+├── scripts/
+│   ├── python/
+│   │   ├── split_tif.py       # Phase 0: Data preparation
+│   │   ├── train_simclr_ct.py # Phase 1: SSL Training
+│   │   ├── validate_simclr.py # Phase 2: UMAP Validation
+│   │   ├── train_unet_simclr.py # Phase 3: Segmentation
+│   │   └── ct_mesh.py         # Phase 4: 3D Meshing
+│   └── bash/
+│       ├── split_tif.sh       # Slurm: Preprocessing
+│       ├── train_simclr_ct.sh # Slurm: SSL Training
+│       ├── validate_simclr.sh # Slurm: Validation
+│       ├── train_unet_simclr.sh # Slurm: UNet fine-tuning
+│       └── ct_mesh.sh         # Slurm: 3D Reconstruction
+├── LICENSE                    # MIT License (Arindam Roy)
+├── README.md                  # Project documentation
+└── requirements.txt           # Python dependencies
+```
 
-## Usage
-Configure Slurm headers in the bash templates for your specific cluster environment before execution.
+## Research Results
+* **SSL Accuracy**: 93.66%
+* **Segmentation Dice**: 0.93
+* **Segmentation IoU**: 0.82
 
-bash
-# Phase 0 & 1: Pre-training
-sbatch scripts/bash/train_simclr_ct.sh
+## CI/CD and Automation
+This repository uses GitHub Actions to automatically lint code and verify dependency compatibility on every push to the main branch.
 
-# Phase 2: Validation
-sbatch scripts/bash/validate_simclr.sh
-
-# Phase 3: Segmentation
-sbatch scripts/bash/train_unet_simclr.sh
-
-# Phase 4: 3D Meshing
-sbatch scripts/bash/ct_mesh.sh
+## License
+Licensed under the MIT License. Copyright (c) 2026 Arindam Roy.
