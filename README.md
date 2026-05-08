@@ -1,17 +1,17 @@
 # SimCLR v1 CT Segmentation Pipeline
 
-![CI/CD Pipeline](https://github.com/roy-arindam-1991/Simclr-v1-automated-pipeline/actions/workflows/main.yml/badge.svg)
-![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.1.2-EE4C2C.svg)
-![License](https://img.shields.io/badge/license-GPLv3-blue.svg)
-![Accuracy](https://img.shields.io/badge/SSL_Accuracy-93.66%25-brightgreen.svg)
-![Dice](https://img.shields.io/badge/Segmentation_Dice-0.93-blue.svg)
+![CI/CD Pipeline(https://github.com/roy-arindam-1991/Simclr-v1-automated-pipeline/actions/workflows/main.yml/badge.svg)
+![Python(https://img.shields.io/badge/python-3.11+-blue.svg)
+![PyTorch(https://img.shields.io/badge/PyTorch-2.1.2-EE4C2C.svg)
+![License(https://img.shields.io/badge/license-GPLv3-blue.svg)
+![Accuracy(https://img.shields.io/badge/SSL_Accuracy-93.66%25-brightgreen.svg)
+![Dice(https://img.shields.io/badge/Segmentation_Dice-0.93-blue.svg)
 
 This repository provides the core technical implementation for the study: **"Breaking the bottleneck: self-supervised deep learning for fully automated fossil CT segmentation"**. The framework introduces a self-supervised, end-to-end pipeline combining SimCLR v1 contrastive pre-training with deterministic pseudo-label generation and U-Net refinement to fully automate fossil CT segmentation without manual annotation.
 
 ## Key Contributors
 * **Arindam Roy**: Lead Researcher and Maintainer
-* **[Poulami Ghosh](https://github.com/g-Poulami)**: Contributor and Pipeline Developer
+* **[Poulami Ghosh(https://github.com/g-Poulami)**: Contributor and Pipeline Developer
 
 ## Pipeline Workflow and Structure
 The framework integrates heterogeneous information sources into a unified model representation through a knowledge fusion step.
