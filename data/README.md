@@ -21,6 +21,6 @@ bash data/run_preprocessing.sh
 
 ## Data Access
 
-Raw CT volumes are available on request via [MorphoSource](https://www.morphosource.org).  
+Raw CT volumes are available on request.  
 Specimens are housed at **National Museums Scotland (NMS)**.  
 See the root `README.md` for full accession numbers.
