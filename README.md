@@ -1,4 +1,4 @@
-# Simclr-v1-automated-pipeline (50k)
+# DEEPCTSEG: Simclr-v1-automated-pipeline (50k)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
