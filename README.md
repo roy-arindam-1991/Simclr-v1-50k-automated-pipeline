@@ -1,4 +1,4 @@
-# Simclr-v1-automated-pipeline
+# Simclr-v1-automated-pipeline (50k)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
@@ -191,16 +191,7 @@ pipeline.run(ct_dir="path/to/new/specimen/tiffs/", output_dir="outputs/")
 
 ## Data
 
-Training data: 50,626 CT images from the Middle Jurassic Kilmaluag Formation, Skye, Scotland. Specimens housed at **National Museums Scotland (NMS)**. CT volumes available on request via [MorphoSource](https://www.morphosource.org).
-
-| Specimen | MorphoSource Accession |
-|---|---|
-| Salamander A (Specimen 1) | 00084381 |
-| Salamander A (Specimen 2) | 000071513 |
-| *M. wakei* (Specimen 1) | 000700518 |
-| *M. wakei* (Specimen 2) | 000700519 |
-| *Mammaliaformes* indet. | 000693738 |
-| Docodonta (undescribed) | 000721884 |
+Training data: 50,626 CT images from the Middle Jurassic Kilmaluag Formation, Skye, Scotland. Specimens housed at **National Museums Scotland (NMS)**. Data available on request.
 
 ---
 
@@ -213,7 +204,7 @@ Trained on a single **NVIDIA A100 GPU** via BlueBear HPC (University of Birmingh
 | SimCLR pre-training (250 epochs) | ~37–38 hrs |
 | U-Net training (500 epochs) | ~6 hrs 10 min |
 | Peak GPU memory | ~3.26 GB |
-| Inference per specimen | 1–3 min |
+| Mesh generation per specimen | 1–3 min |
 
 ---
 
