@@ -11,10 +11,7 @@
 
 ## Authors
 
-| Role | Name |
-|---|---|
-| **Lead Author** | Arindam Roy |
-| **Pipeline Developer** | [Poulami Ghosh](https://github.com/g-Poulami) |
+**Pipeline Developers** -> Arindam Roy, [Poulami Ghosh](https://github.com/g-Poulami)
 
 ---
 
