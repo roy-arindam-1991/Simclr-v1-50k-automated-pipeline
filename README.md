@@ -13,8 +13,8 @@
 
 | Role | Name |
 |---|---|
-| **Main Author & Contributor** | Arindam Roy |
-| Pipeline Developer | [Poulami Ghosh](https://github.com/g-Poulami) |
+| **Lead Author** | Arindam Roy |
+| **Pipeline Developer** | [Poulami Ghosh](https://github.com/g-Poulami) |
 
 ---
 
