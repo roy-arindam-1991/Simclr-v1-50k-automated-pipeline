@@ -6,7 +6,6 @@
 [![Platform](https://img.shields.io/badge/HPC-BlueBear%20%7C%20A100-7B2FBE.svg)](https://www.birmingham.ac.uk/research/arc/bear)
 [![Pipeline](https://img.shields.io/badge/Pipeline-SimCLR%20→%20U--Net-00B4D8.svg)]()
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.XXXXXXX-blueviolet.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
 ---
 
@@ -15,7 +14,7 @@
 | Role | Name |
 |---|---|
 | **Main Author & Contributor** | Arindam Roy |
-| Pipeline Developer | Poulami Ghosh |
+| Pipeline Developer | [Poulami Ghosh](https://github.com/g-Poulami) |
 
 ---
 
@@ -33,70 +32,123 @@ The pipeline reduces per-specimen processing from ~100 person-hours to **1–3 m
 ---
 
 ## Repository Structure
-imclr-v1-automated-pipeline/
+
+```bash
+Simclr-v1-automated-pipeline/
+│
 ├── config/
-│   └── config.yaml            # All hyperparameters and paths
+│   └── config.yaml                  # All hyperparameters and paths
+│
 ├── data/
-│   ├── preprocessing.py       # Resize, normalise, z-standardise CT slices
-│   ├── resize_and_normalise.py
-│   ├── tiff_to_hdf5.py        # Convert TIFF stacks → HDF5 for fast I/O
-│   ├── dataset_split.py       # Fixed-seed train/val/test split
-│   └── run_preprocessing.sh   # Runs preprocessing pipeline on BlueBear HPC
+│   ├── __init__.py
+│   ├── preprocessing.py             # Resize, normalise, z-standardise CT slices
+│   ├── resize_and_normalise.py      # Resize to 224×224, normalise [0,1], z-standardise
+│   ├── tiff_to_hdf5.py              # Convert TIFF stacks → HDF5 (.h5) volumes
+│   ├── dataset_split.py             # Fixed-seed split: 19 train / 2 val / 3 U-Net sets
+│   ├── hdf5_converter.py            # HDF5 I/O utilities
+│   └── run_preprocessing.sh         # Runs all data scripts in order on BlueBear HPC
+│
 ├── simclr/
-│   ├── model.py               # ResNet-50 encoder + MLP projection head
-│   ├── augmentations.py       # Domain-specific stochastic augmentation pipeline
-│   ├── loss.py                # NT-Xent (Normalised Temperature-scaled Cross-Entropy) loss
-│   └── train.py               # SimCLR pre-training loop (250 epochs)
+│   ├── __init__.py
+│   ├── model.py                     # ResNet-50 encoder + 2-layer MLP projection head
+│   ├── augmentations.py             # Domain-specific stochastic augmentation pipeline
+│   ├── loss.py                      # NT-Xent (normalised temperature-scaled cross-entropy)
+│   └── train.py                     # Training loop: 250 epochs, batch 64, LR 3e-4
+│
 ├── masking/
-│   └── rule_based_masking.py  # 5-stage deterministic bone-mask pipeline
+│   ├── __init__.py
+│   └── rule_based_masking.py        # Otsu → region grow → morph ops → component filter
+│
 ├── unet/
-│   ├── model.py               # Modified U-Net (ResNet-50 encoder, 7×7 bottleneck)
-│   ├── loss.py                # Composite Weighted Cross-Entropy + Dice loss
-│   └── train.py               # U-Net training loop (500 epochs)
+│   ├── __init__.py
+│   ├── model.py                     # Deep encoder e1–e4 (64–2048 ch), 7×7 bottleneck, skips
+│   ├── loss.py                      # Composite Weighted Cross-Entropy + Dice loss
+│   └── train.py                     # 500 epochs, AdamW, OneCycleLR, best-checkpoint saving
+│
 ├── mesh/
-│   └── generate_mesh.py       # Region growing → marching cubes → watertight STL
+│   ├── __init__.py
+│   └── generate_mesh.py             # Stack masks → 3D vol → marching cubes (iso=0.5) → STL
+│
 ├── evaluation/
-│   ├── metrics.py             # Dice-Sørensen coefficient, IoU (Jaccard Index)
-│   ├── grad_cam.py            # Grad-CAM heatmaps for encoder sanity checks
-│   └── umap_viz.py            # UMAP of 2048-d ResNet-50 feature vectors
-├── inference.py               # End-to-end inference on new CT datasets
-└── scripts/
-├── 01_preprocess.sh
-├── 02_train_simclr.sh
-├── 03_generate_masks.sh
-├── 04_train_unet.sh
-└── 05_run_inference.sh
+│   ├── __init__.py
+│   ├── metrics.py                   # Dice-Sørensen coefficient, IoU (Jaccard Index)
+│   ├── grad_cam.py                  # Grad-CAM heatmaps over CT slices
+│   └── umap_viz.py                  # 2D UMAP of 2048-d features + KDE overlay
+│
+├── scripts/
+│   ├── 01_preprocess.sh             # Stage 1: data preprocessing on SLURM
+│   ├── 02_train_simclr.sh           # Stage 2: SimCLR pre-training (A100 GPU)
+│   ├── 03_generate_masks.sh         # Stage 3: rule-based coarse masking
+│   ├── 04_train_unet.sh             # Stage 4: U-Net training via knowledge fusion
+│   └── 05_run_inference.sh          # Stage 5: end-to-end inference loop
+│
+├── inference.py                     # End-to-end inference on new CT specimens
+├── requirements.txt
+└── README.md
+```
 
 ---
 
 ## Pipeline Workflow
-Raw CT TIFF slices
-│
-▼
-[1] Preprocessing          resize → 224×224 | normalise [0,1] | z-standardise | → HDF5
-│
-├──────────────────────────────────────────┐
-▼                                          ▼
-[2] SimCLR Pre-training                  [3] Rule-Based Masking
-ResNet-50 + NT-Xent loss                 5-stage deterministic pipeline
-250 epochs | 39,037 unlabelled slices    Otsu → morphological refinement
-Feature vectors: 2048-d                  Coarse binary masks
+
+```bash
+ Raw CT TIFF Slices
+        │
+        ▼
+┌───────────────────────────────────────────┐
+│  STAGE 1 · Preprocessing                 │
+│  resize → 224×224                        │
+│  normalise [0,1] · z-standardise         │
+│  TIFF stacks → HDF5 volumes              │
+└───────────────┬───────────────────────────┘
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+┌──────────────┐  ┌──────────────────────────┐
+│  STAGE 2     │  │  STAGE 3                 │
+│  SimCLR v1   │  │  Rule-Based Masking      │
+│  Pre-training│  │                          │
+│              │  │  Otsu thresholding       │
+│  ResNet-50   │  │  → region growing        │
+│  + MLP head  │  │  → morphological ops     │
+│  NT-Xent loss│  │  → component filtering   │
+│  250 epochs  │  │                          │
+│  39,037 slices  │  Coarse binary masks     │
+│  2048-d feats│  │                          │
+└──────┬───────┘  └─────────────┬────────────┘
+        │                       │
+        └──────────┬────────────┘
+                   ▼
+┌──────────────────────────────────────────┐
+│  STAGE 4 · Knowledge Fusion → U-Net     │
 │                                          │
-└──────────────┬───────────────────────────┘
-▼
-[4] Knowledge Fusion → U-Net
-SimCLR weights initialise encoder
-Composite WCE + Dice loss | 500 epochs
-Fine segmentation masks
-│
-▼
-[5] 3D Mesh Generation
-Stack 2D masks → region growing → marching cubes
-Watertight STL (1–3 min per specimen)
-│
-▼
-[6] Evaluation
-Dice / IoU | Grad-CAM | UMAP | CloudCompare C2C
+│  SimCLR encoder weights → U-Net init    │
+│  Deep encoder: e1–e4 (64 → 2048 ch)     │
+│  7×7 bottleneck · skip connections      │
+│  Loss: Weighted Cross-Entropy + Dice    │
+│  500 epochs · AdamW · OneCycleLR        │
+└──────────────────┬───────────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────────┐
+│  STAGE 5 · 3D Mesh Generation           │
+│                                          │
+│  2D mask stack → 3D volume              │
+│  Region growing · Otsu intensity filter │
+│  Marching cubes (iso = 0.5)             │
+│  Watertight STL · 1–3 min per specimen  │
+└──────────────────┬───────────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────────┐
+│  STAGE 6 · Evaluation                   │
+│                                          │
+│  Dice / IoU per specimen                │
+│  Grad-CAM encoder sanity checks         │
+│  UMAP 2048-d feature visualisation      │
+│  CloudCompare PPR → ICP → C2C distance  │
+└──────────────────────────────────────────┘
+```
 
 ---
 
@@ -113,10 +165,19 @@ pip install -r requirements.txt
 ## Quick Start
 
 ```bash
+# Stage 1 — preprocess raw TIFF stacks
 bash scripts/01_preprocess.sh
+
+# Stage 2 — pre-train SimCLR on unlabelled slices
 bash scripts/02_train_simclr.sh
+
+# Stage 3 — generate rule-based coarse masks
 bash scripts/03_generate_masks.sh
+
+# Stage 4 — train U-Net via knowledge fusion
 bash scripts/04_train_unet.sh
+
+# Stage 5 — run inference on new specimens
 bash scripts/05_run_inference.sh
 ```
 
