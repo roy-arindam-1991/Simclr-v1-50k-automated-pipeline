@@ -41,7 +41,7 @@ Simclr-v1-automated-pipeline/
 │   ├── preprocessing.py             # Resize, normalise, z-standardise CT slices
 │   ├── resize_and_normalise.py      # Resize to 224×224, normalise [0,1], z-standardise
 │   ├── tiff_to_hdf5.py              # Convert TIFF stacks → HDF5 (.h5) volumes
-│   ├── dataset_split.py             # Fixed-seed split: 19 train / 2 val / 3 U-Net sets
+│   ├── dataset_split.py             # Fixed-seed split-  train : val : U-Net train (eg. 80:10:10)
 │   ├── hdf5_converter.py            # HDF5 I/O utilities
 │   └── run_preprocessing.sh         # Runs all data scripts in order on BlueBear HPC
 │
