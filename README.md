@@ -208,19 +208,6 @@ Trained on a single **NVIDIA A100 GPU** via BlueBear HPC (University of Birmingh
 
 ---
 
-## Citation
-
-```bibtex
-@article{roy2025breakingbottleneck,
-  title   = {Breaking the bottleneck: self-supervised deep learning for fully automated fossil {CT} segmentation},
-  author  = {Roy, Arindam and Ghosh, Poulami and Benson, Roger and Weston, Fraser and Scott, Ben and Salili-James, Arianna and Poon, Sanson T.S. and Walsh, Stig and Maidment, Susannah and Butler, Richard},
-  journal = {[journal to be confirmed upon acceptance]},
-  year    = {2025}
-}
-```
-
----
-
 ## License
 
 This project is licensed under the **GNU General Public License v3.0** — see [LICENSE](LICENSE) for full terms.  
