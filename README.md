@@ -9,9 +9,9 @@
 
 ---
 
-## Authors
+## Pipeline Developers
 
-**Pipeline Developers** -> Arindam Roy, [Poulami Ghosh](https://github.com/g-Poulami)
+Arindam Roy, [Poulami Ghosh](https://github.com/g-Poulami)
 
 ---
 
