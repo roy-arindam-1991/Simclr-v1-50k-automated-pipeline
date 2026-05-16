@@ -1,11 +1,6 @@
 # DEEPCTSEG: Simclr-v1-automated-pipeline (50k)
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg)](https://pytorch.org/)
-[![Platform](https://img.shields.io/badge/HPC-BlueBear%20%7C%20A100-7B2FBE.svg)](https://www.birmingham.ac.uk/research/arc/bear)
-[![Pipeline](https://img.shields.io/badge/Pipeline-SimCLR%20→%20U--Net-00B4D8.svg)]()
-[![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE) [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/) [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg)](https://pytorch.org/) [![Platform](https://img.shields.io/badge/HPC-BlueBear%20%7C%20A100-7B2FBE.svg)](https://www.birmingham.ac.uk/research/arc/bear) [![Pipeline](https://img.shields.io/badge/Pipeline-SimCLR%20%E2%86%92%20U--Net-00B4D8.svg)](https://github.com/roy-arindam-1991/Simclr-v1-50k-automated-pipeline/blob/main) [![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](https://github.com/roy-arindam-1991/Simclr-v1-50k-automated-pipeline/blob/main)
 
 ---
 
@@ -30,7 +25,7 @@ The pipeline reduces per-specimen processing from ~100 person-hours to **1–3 m
 
 ## Repository Structure
 
-```bash
+\`\`\`
 Simclr-v1-automated-pipeline/
 │
 ├── config/
@@ -42,9 +37,7 @@ Simclr-v1-automated-pipeline/
 │   ├── __init__.py
 │   ├── preprocessing.py             # Resize, normalise, z-standardise CT slices
 │   ├── resize_and_normalise.py      # Resize and normalise pipeline
-
-
-/bin/bash: q: command not found
+│   ├── tiff_to_hdf5.py              # Convert TIFF stacks → HDF5 (.h5) volumes
 │   ├── dataset_split.py             # Fixed-seed train / val / U-Net partition split
 │   ├── hdf5_converter.py            # HDF5 I/O utilities
 │   └── run_preprocessing.sh         # Runs all data scripts in order on BlueBear HPC
@@ -94,7 +87,7 @@ Simclr-v1-automated-pipeline/
 │   ├── registration_stats.py        # Parses CloudCompare CSV export → Table 2 summary
 │   └── run_registration.sh          # Batch-calls registration_stats.py for all specimens
 │
-├── scripts/
+├── bash_scripts/
 │   ├── README.md                    # SLURM job scripts, stage order, HPC details
 │   ├── 01_preprocess.sh             # Stage 1: data preprocessing on SLURM
 │   ├── 02_train_simclr.sh           # Stage 2: SimCLR pre-training
@@ -106,13 +99,13 @@ Simclr-v1-automated-pipeline/
 │
 ├── requirements.txt
 └── README.md
-```
+\`\`\`
 
 ---
 
 ## Pipeline Workflow
 
-```bash
+\`\`\`
  Raw CT TIFF Slices
         │
         ▼
@@ -181,7 +174,7 @@ Simclr-v1-automated-pipeline/
 │  Region growing · Otsu intensity filter       │
 │  Morphological cleanup                        │
 │  Marching cubes surface extraction            │
-│  Laplacian smoothing                          │ 
+│  Laplacian smoothing                          │
 │  Mesh simplification via quadratic decimation │
 │  Watertight STL output                        │
 └──────────────────┬────────────────────────────┘
@@ -198,44 +191,44 @@ Simclr-v1-automated-pipeline/
 │  External specimens validated           │
 │  against manual thresholding baseline   │
 └─────────────────────────────────────────┘
-```
+\`\`\`
 
 ---
 
 ## Installation
 
-```bash
-git clone https://github.com/roy-arindam-1991/Simclr-v1-automated-pipeline.git
-cd Simclr-v1-automated-pipeline
+\`\`\`bash
+git clone https://github.com/roy-arindam-1991/Simclr-v1-50k-automated-pipeline.git
+cd Simclr-v1-50k-automated-pipeline
 pip install -r requirements.txt
-```
+\`\`\`
 
 ---
 
 ## Quick Start
 
-```bash
+\`\`\`bash
 # Stage 1 — preprocess raw TIFF stacks
-bash scripts/01_preprocess.sh
+bash bash_scripts/01_preprocess.sh
 
 # Stage 2 — pre-train SimCLR on unlabelled slices
-bash scripts/02_train_simclr.sh
+bash bash_scripts/02_train_simclr.sh
 
 # Stage 3 — SimCLR sanity checks (Grad-CAM + UMAP)
-bash scripts/03_simclr_validation.sh
+bash bash_scripts/03_simclr_validation.sh
 
 # Stage 4 — generate rule-based coarse masks
-bash scripts/04_generate_masks.sh
+bash bash_scripts/04_generate_masks.sh
 
 # Stage 5 — SimCLR → U-Net knowledge fusion
-bash scripts/05_transfer_weights.sh
+bash bash_scripts/05_transfer_weights.sh
 
 # Stage 6 — train U-Net
-bash scripts/06_train_unet.sh
+bash bash_scripts/06_train_unet.sh
 
 # Stage 7 — run inference and generate 3D meshes
-bash scripts/07_run_inference.sh
-```
+bash bash_scripts/07_run_inference.sh
+\`\`\`
 
 ---
 
