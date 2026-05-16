@@ -1,0 +1,62 @@
+[33m9be4c02[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m chore: remove accidental submodule entries
+[33m6b538c2[m Add full pipeline README: MoCo v2 pre-training, validation, and U-Net segmentation
+[33ma37bb93[m chore: wipe repo for fresh start
+[33m6c973a1[m refactor: rename data→data_preprocessing, scripts→bash_scripts
+[33mdb397c6[m Fix formatting issues in README stages
+[33ma7c1b3f[m docs: align terminology with manuscript — pretraining, dual-stream knowledge transfer, mesh simplification
+[33mdf01439[m refactor: rename validation → simclr_validation, reposition before masking and unet to match manuscript chronology
+[33me1fd5a0[m Fix formatting in README for knowledge fusion stage
+[33m2b8726c[m Remove citation section from README
+[33m92b6e72[m Update dataset_split.py description in README
+[33mf2aa0d7[m Rename mesh_construction.py to inference.py
+[33mfad59ad[m refactor: rename evaluation → validation, inference.py → mesh_construction.py
+[33m7b73171[m Update README to clarify access to raw CT volumes
+[33meab53b2[m docs: add README.md for all subfolders — data, simclr, masking, unet, mesh, evaluation, scripts, config
+[33m19c3816[m Update authors section to pipeline developers
+[33m1f09fa5[m Fix formatting in README for knowledge fusion stage
+[33m3721188[m Fix formatting issues in README stages
+[33m0927f91[m Rename project to DEEPCTSEG
+[33m9a7b0c4[m Revise README with version and data details
+[33maf50f7a[m Update authors section in README.md
+[33mb4f689b[m Update author role in README.md
+[33mfb20acb[m docs: repo structure and pipeline workflow in bash code blocks
+[33mf97a2f6[m feat: GPL-3.0 licence, updated README — main author Arindam Roy, pipeline developer Poulami Ghosh
+[33m43df126[m Add full pipeline: SimCLR, masking, U-Net, mesh, evaluation
+[33m6e8e422[m feat: add data preprocessing module
+[33m0a79078[m chore: wipe repo for fresh start
+[33m386a252[m Delete scripts/python/tif_hdf5.py
+[33m9e44cbf[m Delete scripts/python/image_fixed.py
+[33ma506b3c[m Delete scripts/bash/tif_hdf5.sh
+[33med57498[m Final: Verified all Python codes for structural and logical completeness
+[33m130715d[m Final: Sequential Bash templates for Data/Mask/H5 pipeline
+[33m03e2bb1[m Final: Sequential Preprocessing (Data -> Mask -> H5) without hard-coded dataset sizes
+[33m7870211[m Final: Sequential order - Data Prep, Mask Prep, then H5 Conversion
+[33mb670114[m Final: Separated Data and Mask Prep logic and restored badges
+[33m059a99c[m Final: Implemented data prep masking and removed all citation tags
+[33m4c4bb8d[m Final: Moved deterministic masking to data prep phase
+[33m541b1ba[m Final: Integrated fixed-seed data partitioning logic into preprocessing
+[33m247e1b9[m Final: Implemented complete .sh scripts and removed all citation tags
+[33m6dcd459[m Docs: Added comprehensive internal comments and methodological explanations
+[33m2a85f9a[m Refactor: Renamed scripts to match manuscript nomenclature and added documentation
+[33m6d11ef4[m Final: Aligned README headers with manuscript 'Breaking the bottleneck' sections
+[33mda43ac8[m Docs: Update contributor list
+[33m5b522dd[m Docs: Update contributor list
+[33m50244c3[m Docs: Update contributor list
+[33md1975c2[m Branding: Updated README and badges for new repository name
+[33m0724005[m Fix: Restored detailed README and corrected CI/CD status badge
+[33m0f31ba4[m Final: Added workflow visualization, file structure map, and CI/CD
+[33md641090[m Docs: Updated MIT License with Arindam Roy
+[33m6be091c[m Final: Consolidated all generalized pipeline scripts and documentation
+[33mf7d0333[m Final: Added status badges and consolidated research narrative in main
+[33mc046546[m Refactor: Consolidated all generalized 40K pipeline scripts into main
+[33m501b5db[m Update: Completed validate_simclr.py with full feature extraction logic
+[33md5b389a[m Refactor: Consolidated all generalized scripts to main and removed results
+[33ma58eabd[m Refactor: Integrated generalized validation pipeline and results into main
+[33mc6ecefd[m[33m ([m[1;31morigin/validation[m[33m, [m[1;32mvalidation[m[33m)[m Branch Setup: Validation pipeline and UMAP analysis results
+[33m69595e7[m Cleanup: Removed raw UMAP coordinates and updated validation summary
+[33mc42c13d[m Results and Refactor: Added 93.66% accuracy benchmarks and finalized structure
+[33m5aced92[m Refactor: Finalized generalized folder structure for SimCLR and Data Prep
+[33mab870c9[m Final Refactor: Removed SBATCH account details and all remaining hardcoded paths
+[33mae7510c[m Final Refactor: Removed all hardcoded paths and added requirements.txt
+[33m2d8e717[m Initial commit: Organized 40K pipeline scripts for reproducibility
+[33m246704f[m Initial commit of bioinformatics data preparation scripts
