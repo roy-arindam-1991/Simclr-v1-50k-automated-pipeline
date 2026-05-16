@@ -37,12 +37,14 @@ Simclr-v1-automated-pipeline/
 │   ├── README.md                    # Configuration guide and key parameter reference
 │   └── config.yaml                  # All hyperparameters and paths
 │
-├── data/
+├── data_preprocessing/
 │   ├── README.md                    # Data access, MorphoSource accession, NMS request
 │   ├── __init__.py
 │   ├── preprocessing.py             # Resize, normalise, z-standardise CT slices
 │   ├── resize_and_normalise.py      # Resize and normalise pipeline
-│   ├── tiff_to_hdf5.py              # Convert TIFF stacks → HDF5 (.h5) volumes
+
+
+/bin/bash: q: command not found
 │   ├── dataset_split.py             # Fixed-seed train / val / U-Net partition split
 │   ├── hdf5_converter.py            # HDF5 I/O utilities
 │   └── run_preprocessing.sh         # Runs all data scripts in order on BlueBear HPC
