@@ -114,15 +114,15 @@ Simclr-v1-automated-pipeline/
  Raw CT TIFF Slices
         │
         ▼
-┌───────────────────────────────────────────┐
+┌──────────────────────────────────────────┐
 │  STAGE 1 · Data Preprocessing            │
-│                                           │
+│                                          │
 │  Proportional sampling                   │
 │  resize → 224×224 px                     │
 │  16-bit → 8-bit conversion               │
 │  normalise · z-standardise               │
 │  TIFF stacks → HDF5 volumes              │
-└───────────────┬───────────────────────────┘
+└───────────────┬──────────────────────────┘
                 │
         ┌───────┴────────┐
         ▼                ▼
@@ -150,52 +150,52 @@ Simclr-v1-automated-pipeline/
        │                            │
        └──────────────┬─────────────┘
                       ▼
-┌──────────────────────────────────────────┐
+┌─────────────────────────────────────────┐
 │  STAGE 5 · Knowledge Fusion             │
-│                                          │
+│                                         │
 │  SimCLR ResNet-50 encoder weights       │
 │  → initialise U-Net encoder             │
-│                                          │
+│                                         │
 │  Dual-stream transfer:                  │
 │  · Textural features from SimCLR        │
 │  · Spatial priors from coarse masks     │
-└──────────────────┬───────────────────────┘
+└──────────────────┬──────────────────────┘
                    │
                    ▼
-┌──────────────────────────────────────────┐
+┌─────────────────────────────────────────┐
 │  STAGE 6 · U-Net Segmentation           │
-│                                          │
+│                                         │
 │  Deep encoder with skip connections     │
 │  Expanded bottleneck                    │
 │  Loss: Weighted Cross-Entropy + Dice    │
 │  AdamW · OneCycleLR                     │
-└──────────────────┬───────────────────────┘
+└──────────────────┬──────────────────────┘
                    │
                    ▼
-┌──────────────────────────────────────────┐
-│  STAGE 7 · 3D Mesh Generation           │
-│                                          │
-│  Stack 2D masks → 3D volume             │
-│  Region growing · Otsu intensity filter │
-│  Morphological cleanup                  │
-│  Marching cubes surface extraction      │
-│  Laplacian smoothing                    │
-│  Mesh simplification via quadratic decimation                   │
-│  Watertight STL output                  │
-└──────────────────┬───────────────────────┘
+┌──────────────────────────────────────────────┐
+│  STAGE 7 · 3D Mesh Generation                │
+│                                              │
+│  Stack 2D masks → 3D volume                  │
+│  Region growing · Otsu intensity filter      │
+│  Morphological cleanup                       │
+│  Marching cubes surface extraction           │
+│  Laplacian smoothing                         │
+│  Mesh simplification via quadratic decimation│
+│  Watertight STL output                       │
+└──────────────────┬───────────────────────────┘
                    │
                    ▼
-┌──────────────────────────────────────────┐
+┌─────────────────────────────────────────┐
 │  STAGE 8 · Geometric Registration       │
 │           (CloudCompare v2)             │
-│                                          │
+│                                         │
 │  PPR → manual landmarking               │
-│  ICP → rigid alignment (scale = 1.0)   │
-│  C2C → signed distance analysis        │
-│                                          │
+│  ICP → rigid alignment (scale = 1.0)    │
+│  C2C → signed distance analysis         │
+│                                         │
 │  External specimens validated           │
 │  against manual thresholding baseline   │
-└──────────────────────────────────────────┘
+└─────────────────────────────────────────┘
 ```
 
 ---
