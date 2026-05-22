@@ -6,7 +6,7 @@
 
 ## Pipeline Developers
 
-Arindam Roy, [Poulami Ghosh](https://github.com/g-Poulami)
+[Arindam Roy](https://github.com/roy-arindam-1991), [Poulami Ghosh](https://github.com/g-Poulami)
 
 ---
 
